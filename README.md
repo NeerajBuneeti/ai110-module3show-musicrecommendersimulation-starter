@@ -694,3 +694,11 @@ A few sentences about what you learned:
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
 
+---
+
+## Reflection
+
+Building VibeFinder 1.0 from scratch taught me that the hardest part of a recommender system is not the scoring logic — it is the data underneath it. The weight design felt like the central decision early on, but the weight experiment proved that wrong. Halving genre and doubling energy changed nothing at rank 1 for any of the seven profiles I tested. What actually determined whether the system worked was whether the catalog had a song in the right genre with the right mood. The adversarial profiles — a reggae fan getting an electronic recommendation, a classical listener whose only genre match lost to an unrelated track by 0.3 points — were not fixable through tuning. They were structural gaps, and the only real fixes were either more data or more connections in the neighborhood maps. That realization is the thing I will carry forward: in production recommender systems, model architecture and data coverage are often more important than hyperparameter precision.
+
+The AI tools I used throughout this project were genuinely useful and I would use them the same way again, but they required a specific kind of attention. Claude helped me move fast on things that would have taken hours manually — drafting the genre and mood tier maps, generating the expanded song catalog, running adversarial profiles against the scorer and reporting the scores. Where I had to slow down was in interpreting the results. When the Knife Edge profile showed Overdrive Protocol beating Morning Prelude by 0.3 points, I had to trace through the score breakdown myself to confirm the logic was correct and the edge case was real. The tool surfaces the output but it does not tell you what the output means or whether you should trust it. Getting comfortable with that boundary — using AI to accelerate the work, using your own judgment to evaluate it — is probably the most transferable thing I practiced here.
+
