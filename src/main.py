@@ -9,7 +9,7 @@ You will implement the functions in recommender.py:
 - recommend_songs
 """
 
-from src.recommender import load_songs, recommend_songs
+from src.recommender import load_songs, recommend_songs, SCORING_MODES
 
 
 def main() -> None:
@@ -128,6 +128,40 @@ def main() -> None:
         print(f"{'=' * 50}")
 
         recommendations = recommend_songs(user_prefs, songs, k=5)
+
+        print("\nTop recommendations:\n")
+        for i, rec in enumerate(recommendations, start=1):
+            song, score, explanation = rec
+            bar_filled = round(score * 20)
+            bar = "#" * bar_filled + "-" * (20 - bar_filled)
+            print(f"  #{i}  {song['title']} - {song['artist']}")
+            print(f"       Score: {score * 100:.1f}%  [{bar}]")
+            for reason in explanation.split("; "):
+                print(f"       > {reason}")
+            print()
+
+    # --- Scoring Mode Comparison (Gym Warrior only) ---
+    scoring_mode_demo(songs)
+
+
+def scoring_mode_demo(songs) -> None:
+    """Show how different scoring modes change Gym Warrior's results."""
+    gym_warrior = {
+        "genre": "metal",
+        "mood": "angry",
+        "energy": 0.95,
+        "likes_acoustic": False,
+    }
+
+    for mode in ("genre_first", "mood_first", "energy_first"):
+        weights = SCORING_MODES[mode]
+        print(f"\n{'=' * 50}")
+        print(f"Scoring Mode: {mode}  (Gym Warrior)")
+        print(f"  weights: genre={weights['genre']}, mood={weights['mood']}, "
+              f"energy={weights['energy']}, normalizer={weights['normalizer']}")
+        print(f"{'=' * 50}")
+
+        recommendations = recommend_songs(gym_warrior, songs, k=5, mode=mode)
 
         print("\nTop recommendations:\n")
         for i, rec in enumerate(recommendations, start=1):

@@ -202,14 +202,32 @@ def load_songs(csv_path: str) -> List[Dict]:
             songs.append(song)
     return songs
 
-def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
+DEFAULT_WEIGHTS = {
+    "genre": 3.0,
+    "mood": 2.5,
+    "energy": 2.0,
+    "valence": 1.5,
+    "acousticness": 1.0,
+    "normalizer": 10.0,
+}
+
+SCORING_MODES = {
+    "standard": DEFAULT_WEIGHTS,
+    "genre_first": {**DEFAULT_WEIGHTS, "genre": 5.0, "normalizer": 12.0},
+    "mood_first": {**DEFAULT_WEIGHTS, "mood": 5.0, "normalizer": 12.0},
+    "energy_first": {**DEFAULT_WEIGHTS, "energy": 4.0, "normalizer": 11.0},
+}
+
+
+def score_song(user_prefs: Dict, song: Dict, weights: Optional[Dict] = None) -> Tuple[float, List[str]]:
     """
     Scores a single song against user preferences.
     Required by recommend_songs() and src/main.py
     """
+    w = weights or DEFAULT_WEIGHTS
     reasons = []
 
-    # --- Genre (weight 3.0) ---
+    # --- Genre ---
     GENRE_CLOSE_COUSINS = [
         {"rock", "metal"},
         {"pop", "indie pop"},
@@ -235,7 +253,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     else:
         genre_score = 0.0
 
-    genre_weighted = genre_score * 3.0
+    genre_weighted = genre_score * w["genre"]
     reasons.append(f"genre match: {user_genre} -> {song_genre} (+{genre_weighted:.2f})")
 
     # --- Mood (weight 2.5) ---
@@ -263,7 +281,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     else:
         mood_score = 0.0
 
-    mood_weighted = mood_score * 2.5
+    mood_weighted = mood_score * w["mood"]
     reasons.append(f"mood match: {user_mood} -> {song_mood} (+{mood_weighted:.2f})")
 
     # --- Energy (weight 2.0) ---
@@ -271,7 +289,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     song_energy = song["energy"]
     energy_diff = abs(user_energy - song_energy)
     energy_score = 1.0 - energy_diff
-    energy_weighted = energy_score * 2.0
+    energy_weighted = energy_score * w["energy"]
     reasons.append(f"energy proximity: |{user_energy} - {song_energy}| = {energy_diff:.2f} (+{energy_weighted:.2f})")
 
     # --- Valence (weight 1.5) ---
@@ -279,7 +297,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     song_valence = song["valence"]
     valence_diff = abs(user_valence - song_valence)
     valence_score = 1.0 - valence_diff
-    valence_weighted = valence_score * 1.5
+    valence_weighted = valence_score * w["valence"]
     reasons.append(f"valence proximity: |{user_valence} - {song_valence}| = {valence_diff:.2f} (+{valence_weighted:.2f})")
 
     # --- Acousticness (weight 1.0) ---
@@ -290,12 +308,12 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     else:
         acousticness_score = 1.0 - song_acousticness
         acoustic_label = "dislikes acoustic"
-    acousticness_weighted = acousticness_score * 1.0
+    acousticness_weighted = acousticness_score * w["acousticness"]
     reasons.append(f"acousticness: {acoustic_label}, song={song_acousticness:.2f} (+{acousticness_weighted:.2f})")
 
-    # --- Final score (normalize by total weight 10.0) ---
+    # --- Final score ---
     raw = genre_weighted + mood_weighted + energy_weighted + valence_weighted + acousticness_weighted
-    score = raw / 10.0
+    score = raw / w["normalizer"]
 
     return (score, reasons)
 
@@ -317,14 +335,15 @@ def apply_diversity_penalty(scored_songs: List[Tuple[Dict, float, str]], k: int 
     return result
 
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str = "standard") -> List[Tuple[Dict, float, str]]:
     """
     Functional implementation of the recommendation logic.
     Required by src/main.py
     """
+    weights = SCORING_MODES[mode]
     scored = []
     for song in songs:
-        score, reasons = score_song(user_prefs, song)
+        score, reasons = score_song(user_prefs, song, weights)
         explanation = "; ".join(reasons)
         scored.append((song, score, explanation))
 
