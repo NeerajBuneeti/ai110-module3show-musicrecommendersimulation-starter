@@ -173,6 +173,8 @@ You can add more tests in `tests/test_recommender.py`.
 
 Running `python -m src.main` with the **Gym Warrior** profile (genre: metal, mood: angry, energy: 0.95, likes_acoustic: False):
 
+![Gym Warrior](assets/gym_warrior.png)
+
 ```
 ==================================================
 Profile: Gym Warrior
@@ -224,6 +226,12 @@ Top recommendations:
 ### Adversarial Profiles
 
 Three profiles designed to expose weaknesses in the scoring algorithm: a double-isolated genre/mood node, a mood-overrides-genre inversion, and a knife-edge contradiction where opposing features cancel out.
+
+![Adversarial 1 - Catalog Cliff](assets/adversarial_1_catalog_cliff.png)
+
+![Adversarial 2 - Mood Override](assets/adversarial_2_mood+override.png)
+
+![Adversarial 3 - Knife Edge](assets/adversarial_3_knife_edge.png)
 
 ```
 ==================================================
