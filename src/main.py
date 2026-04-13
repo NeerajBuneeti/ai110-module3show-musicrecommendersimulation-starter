@@ -71,11 +71,55 @@ def main() -> None:
         "likes_acoustic": True,
     }
 
+    # ── Adversarial Profiles ───────────────────────────────────────────────────
+    #
+    # Adversarial 1: Catalog Cliff
+    # Both "hip-hop" and "confident" are isolated nodes — no close cousins, no
+    # extended family, and each appears in exactly one song (Block Party Anthem).
+    # After the one exact match the scorer has zero genre or mood signal for the
+    # remaining 19 songs, so ranks #2-5 are decided purely by energy/valence/
+    # acousticness proximity. The results look plausible but have no musical basis.
+    catalog_cliff = {
+        "genre": "hip-hop",
+        "mood": "confident",
+        "energy": 0.85,
+        "likes_acoustic": False,
+    }
+
+    # Adversarial 2: Mood Override
+    # Reggae appears in exactly one catalog song — Island Time (#19, mood: relaxed).
+    # "relaxed" and "energetic" belong to opposite mood clusters with zero adjacency,
+    # so the mood+energy weights (4.5 total) beat the genre weight (3.0), and
+    # Overdrive Protocol (electronic/energetic) outscores the only reggae track.
+    # The system recommends a genre the user never asked for at rank #1.
+    mood_override = {
+        "genre": "reggae",
+        "mood": "energetic",
+        "energy": 0.92,
+        "likes_acoustic": False,
+    }
+
+    # Adversarial 3: Knife Edge
+    # Classical music is inherently low-energy (Morning Prelude: energy=0.18, mood=
+    # peaceful). The user's high energy target and energetic mood pull the score away
+    # from the only classical song — while "likes_acoustic=True" pulls back toward it.
+    # The forces nearly cancel: Overdrive Protocol (electronic) edges out Morning
+    # Prelude (classical) by ~0.3 percentage points, burying the genre match at #2.
+    knife_edge = {
+        "genre": "classical",
+        "mood": "energetic",
+        "energy": 0.90,
+        "likes_acoustic": True,
+    }
+
     profiles = [
         ("Gym Warrior", gym_warrior),
         ("Late-Night Study Session", study_session),
         ("Late-Night Driver", late_night_driver),
         ("Soul & Warmth Seeker", acoustic_soul),
+        ("Adversarial 1 - Catalog Cliff", catalog_cliff),
+        ("Adversarial 2 - Mood Override", mood_override),
+        ("Adversarial 3 - Knife Edge", knife_edge),
     ]
 
     for name, user_prefs in profiles:

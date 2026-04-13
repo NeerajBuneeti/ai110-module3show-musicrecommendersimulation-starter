@@ -221,6 +221,150 @@ Top recommendations:
        > acousticness: dislikes acoustic, song=0.08 (+0.92)
 ```
 
+### Adversarial Profiles
+
+Three profiles designed to expose weaknesses in the scoring algorithm: a double-isolated genre/mood node, a mood-overrides-genre inversion, and a knife-edge contradiction where opposing features cancel out.
+
+```
+==================================================
+Profile: Adversarial 1 - Catalog Cliff
+==================================================
+
+Top recommendations:
+
+  #1  Block Party Anthem - DJ Krave
+       Score: 95.3%  [###################-]
+       > genre match: hip-hop -> hip-hop (+3.00)
+       > mood match: confident -> confident (+2.50)
+       > energy proximity: |0.85 - 0.88| = 0.03 (+1.94)
+       > valence proximity: |0.5 - 0.72| = 0.22 (+1.17)
+       > acousticness: dislikes acoustic, song=0.08 (+0.92)
+
+  #2  Storm Runner - Voltline
+       Score: 42.5%  [########------------]
+       > genre match: hip-hop -> rock (+0.00)
+       > mood match: confident -> intense (+0.00)
+       > energy proximity: |0.85 - 0.91| = 0.06 (+1.88)
+       > valence proximity: |0.5 - 0.48| = 0.02 (+1.47)
+       > acousticness: dislikes acoustic, song=0.10 (+0.90)
+
+  #3  Night Drive Loop - Neon Echo
+       Score: 40.7%  [########------------]
+       > genre match: hip-hop -> synthwave (+0.00)
+       > mood match: confident -> moody (+0.00)
+       > energy proximity: |0.85 - 0.75| = 0.10 (+1.80)
+       > valence proximity: |0.5 - 0.49| = 0.01 (+1.48)
+       > acousticness: dislikes acoustic, song=0.22 (+0.78)
+
+  #4  Overdrive Protocol - Flux State
+       Score: 40.2%  [########------------]
+       > genre match: hip-hop -> electronic (+0.00)
+       > mood match: confident -> energetic (+0.00)
+       > energy proximity: |0.85 - 0.95| = 0.10 (+1.80)
+       > valence proximity: |0.5 - 0.66| = 0.16 (+1.26)
+       > acousticness: dislikes acoustic, song=0.04 (+0.96)
+
+  #5  Iron Curtain - Razorback
+       Score: 39.1%  [########------------]
+       > genre match: hip-hop -> metal (+0.00)
+       > mood match: confident -> angry (+0.00)
+       > energy proximity: |0.85 - 0.97| = 0.12 (+1.76)
+       > valence proximity: |0.5 - 0.31| = 0.19 (+1.22)
+       > acousticness: dislikes acoustic, song=0.06 (+0.94)
+
+==================================================
+Profile: Adversarial 2 - Mood Override
+==================================================
+
+Top recommendations:
+
+  #1  Overdrive Protocol - Flux State
+       Score: 66.6%  [#############-------]
+       > genre match: reggae -> electronic (+0.00)
+       > mood match: energetic -> energetic (+2.50)
+       > energy proximity: |0.92 - 0.95| = 0.03 (+1.94)
+       > valence proximity: |0.5 - 0.66| = 0.16 (+1.26)
+       > acousticness: dislikes acoustic, song=0.04 (+0.96)
+
+  #2  Island Time - Coral Roots
+       Score: 56.7%  [###########---------]
+       > genre match: reggae -> reggae (+3.00)
+       > mood match: energetic -> relaxed (+0.00)
+       > energy proximity: |0.92 - 0.52| = 0.40 (+1.20)
+       > valence proximity: |0.5 - 0.82| = 0.32 (+1.02)
+       > acousticness: dislikes acoustic, song=0.55 (+0.45)
+
+  #3  Storm Runner - Voltline
+       Score: 56.0%  [###########---------]
+       > genre match: reggae -> rock (+0.00)
+       > mood match: energetic -> intense (+1.25)
+       > energy proximity: |0.92 - 0.91| = 0.01 (+1.98)
+       > valence proximity: |0.5 - 0.48| = 0.02 (+1.47)
+       > acousticness: dislikes acoustic, song=0.10 (+0.90)
+
+  #4  Iron Curtain - Razorback
+       Score: 53.0%  [###########---------]
+       > genre match: reggae -> metal (+0.00)
+       > mood match: energetic -> angry (+1.25)
+       > energy proximity: |0.92 - 0.97| = 0.05 (+1.90)
+       > valence proximity: |0.5 - 0.31| = 0.19 (+1.22)
+       > acousticness: dislikes acoustic, song=0.06 (+0.94)
+
+  #5  Gym Hero - Max Pulse
+       Score: 52.8%  [###########---------]
+       > genre match: reggae -> pop (+0.00)
+       > mood match: energetic -> intense (+1.25)
+       > energy proximity: |0.92 - 0.93| = 0.01 (+1.98)
+       > valence proximity: |0.5 - 0.77| = 0.27 (+1.09)
+       > acousticness: dislikes acoustic, song=0.05 (+0.95)
+
+==================================================
+Profile: Adversarial 3 - Knife Edge
+==================================================
+
+Top recommendations:
+
+  #1  Overdrive Protocol - Flux State
+       Score: 57.0%  [###########---------]
+       > genre match: classical -> electronic (+0.00)
+       > mood match: energetic -> energetic (+2.50)
+       > energy proximity: |0.9 - 0.95| = 0.05 (+1.90)
+       > valence proximity: |0.5 - 0.66| = 0.16 (+1.26)
+       > acousticness: likes acoustic, song=0.04 (+0.04)
+
+  #2  Morning Prelude - Clara Voss
+       Score: 56.7%  [###########---------]
+       > genre match: classical -> classical (+3.00)
+       > mood match: energetic -> peaceful (+0.00)
+       > energy proximity: |0.9 - 0.18| = 0.72 (+0.56)
+       > valence proximity: |0.5 - 0.74| = 0.24 (+1.14)
+       > acousticness: likes acoustic, song=0.97 (+0.97)
+
+  #3  Storm Runner - Voltline
+       Score: 48.0%  [##########----------]
+       > genre match: classical -> rock (+0.00)
+       > mood match: energetic -> intense (+1.25)
+       > energy proximity: |0.9 - 0.91| = 0.01 (+1.98)
+       > valence proximity: |0.5 - 0.48| = 0.02 (+1.47)
+       > acousticness: likes acoustic, song=0.10 (+0.10)
+
+  #4  Iron Curtain - Razorback
+       Score: 43.9%  [#########-----------]
+       > genre match: classical -> metal (+0.00)
+       > mood match: energetic -> angry (+1.25)
+       > energy proximity: |0.9 - 0.97| = 0.07 (+1.86)
+       > valence proximity: |0.5 - 0.31| = 0.19 (+1.22)
+       > acousticness: likes acoustic, song=0.06 (+0.06)
+
+  #5  Gym Hero - Max Pulse
+       Score: 43.4%  [#########-----------]
+       > genre match: classical -> pop (+0.00)
+       > mood match: energetic -> intense (+1.25)
+       > energy proximity: |0.9 - 0.93| = 0.03 (+1.94)
+       > valence proximity: |0.5 - 0.77| = 0.27 (+1.09)
+       > acousticness: likes acoustic, song=0.05 (+0.05)
+```
+
 ---
 
 ## Experiments You Tried
