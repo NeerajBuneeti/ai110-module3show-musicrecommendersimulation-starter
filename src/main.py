@@ -10,6 +10,7 @@ You will implement the functions in recommender.py:
 """
 
 from src.recommender import load_songs, recommend_songs, SCORING_MODES
+from tabulate import tabulate
 
 
 def main() -> None:
@@ -122,6 +123,8 @@ def main() -> None:
         ("Adversarial 3 - Knife Edge", knife_edge),
     ]
 
+    summary_rows = []
+
     for name, user_prefs in profiles:
         print(f"\n{'=' * 50}")
         print(f"Profile: {name}")
@@ -140,8 +143,21 @@ def main() -> None:
                 print(f"       > {reason}")
             print()
 
+            top_reason = explanation.split("; ")[0]
+            summary_rows.append([name, i, song["title"], song["genre"], f"{score * 100:.1f}%", top_reason])
+
     # --- Scoring Mode Comparison (Gym Warrior only) ---
     scoring_mode_demo(songs)
+
+    # --- Summary Table ---
+    print(f"\n{'=' * 50}")
+    print("Summary: All Profiles")
+    print(f"{'=' * 50}\n")
+    print(tabulate(
+        summary_rows,
+        headers=["Profile", "Rank", "Title", "Genre", "Score", "Top Reason"],
+        tablefmt="simple",
+    ))
 
 
 def scoring_mode_demo(songs) -> None:
