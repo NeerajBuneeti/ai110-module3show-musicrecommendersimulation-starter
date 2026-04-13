@@ -563,142 +563,17 @@ The standard profiles are stable under weight perturbation because their genre a
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+- **Genre dominance and catalog sparsity.** With a weight of 3.0, genre controls nearly a third of the final score. But 10 of the 17 genres have only a single song each, so users who prefer classical, reggae, or hip-hop hit a ceiling immediately and often receive off-genre recommendations simply because there is nothing closer in stock.
+- **Orphaned mood nodes.** The moods `confident`, `nostalgic`, and `romantic` have zero adjacency connections in the mood neighborhood map. Songs carrying those moods score 0.0 on mood for every user who did not ask for them exactly, which means they can only surface through energy or acousticness proximity — signals that have nothing to do with emotional fit.
+- **Silent valence default.** No user profile specifies a `target_valence`, so the scorer defaults to 0.5 every time. This quietly advantages mid-valence songs like Overdrive Protocol (0.66) and disadvantages both very uplifting and very somber tracks, regardless of what the user might actually prefer.
+- **No behavioral learning.** The system only knows what users say they want, not what they actually listen to. It cannot correct itself when stated preference and real preference diverge, and it will not pick up on taste shifts over time the way a streaming platform would.
 
 ---
 
 ## Reflection
-
-Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+Building this recommender taught me that the scoring algorithm is the easy part — the data underneath it is what actually determines whether recommendations feel right or wrong. I expected the weight experiment to produce visibly different results, but halving genre weight and doubling energy weight changed nothing at rank 1 for any of the seven profiles I tested. The standard profiles passed because the catalog happened to have the right song in the right genre, and the adversarial profiles failed because of structural gaps — one reggae song, one classical song, orphaned mood nodes — that no amount of weight tuning could fix. The takeaway is that in real recommender systems, data coverage and feature connectivity often matter more than hyperparameter precision.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
-
----
-
-## 7. `model_card_template.md`
-
-Combines reflection and model card framing from the Module 3 guidance. :contentReference[oaicite:2]{index=2}  
-
-```markdown
-# 🎧 Model Card - Music Recommender Simulation
-
-## 1. Model Name
-
-Give your recommender a name, for example:
-
-> VibeFinder 1.0
-
----
-
-## 2. Intended Use
-
-- What is this system trying to do
-- Who is it for
-
-Example:
-
-> This model suggests 3 to 5 songs from a small catalog based on a user's preferred genre, mood, and energy level. It is for classroom exploration only, not for real users.
-
----
-
-## 3. How It Works (Short Explanation)
-
-Describe your scoring logic in plain language.
-
-- What features of each song does it consider
-- What information about the user does it use
-- How does it turn those into a number
-
-Try to avoid code in this section, treat it like an explanation to a non programmer.
-
----
-
-## 4. Data
-
-Describe your dataset.
-
-- How many songs are in `data/songs.csv`
-- Did you add or remove any songs
-- What kinds of genres or moods are represented
-- Whose taste does this data mostly reflect
-
----
-
-## 5. Strengths
-
-Where does your recommender work well
-
-You can think about:
-- Situations where the top results "felt right"
-- Particular user profiles it served well
-- Simplicity or transparency benefits
-
----
-
-## 6. Limitations and Bias
-
-Where does your recommender struggle
-
-Some prompts:
-- Does it ignore some genres or moods
-- Does it treat all users as if they have the same taste shape
-- Is it biased toward high energy or one genre by default
-- How could this be unfair if used in a real product
-
----
-
-## 7. Evaluation
-
-How did you check your system
-
-Examples:
-- You tried multiple user profiles and wrote down whether the results matched your expectations
-- You compared your simulation to what a real app like Spotify or YouTube tends to recommend
-- You wrote tests for your scoring logic
-
-You do not need a numeric metric, but if you used one, explain what it measures.
-
----
-
-## 8. Future Work
-
-If you had more time, how would you improve this recommender
-
-Examples:
-
-- Add support for multiple users and "group vibe" recommendations
-- Balance diversity of songs instead of always picking the closest match
-- Use more features, like tempo ranges or lyric themes
-
----
-
-## 9. Personal Reflection
-
-A few sentences about what you learned:
-
-- What surprised you about how your system behaved
-- How did building this change how you think about real music recommenders
-- Where do you think human judgment still matters, even if the model seems "smart"
-
----
-
-## Reflection
-
-Building VibeFinder 1.0 from scratch taught me that the hardest part of a recommender system is not the scoring logic — it is the data underneath it. The weight design felt like the central decision early on, but the weight experiment proved that wrong. Halving genre and doubling energy changed nothing at rank 1 for any of the seven profiles I tested. What actually determined whether the system worked was whether the catalog had a song in the right genre with the right mood. The adversarial profiles — a reggae fan getting an electronic recommendation, a classical listener whose only genre match lost to an unrelated track by 0.3 points — were not fixable through tuning. They were structural gaps, and the only real fixes were either more data or more connections in the neighborhood maps. That realization is the thing I will carry forward: in production recommender systems, model architecture and data coverage are often more important than hyperparameter precision.
-
-The AI tools I used throughout this project were genuinely useful and I would use them the same way again, but they required a specific kind of attention. Claude helped me move fast on things that would have taken hours manually — drafting the genre and mood tier maps, generating the expanded song catalog, running adversarial profiles against the scorer and reporting the scores. Where I had to slow down was in interpreting the results. When the Knife Edge profile showed Overdrive Protocol beating Morning Prelude by 0.3 points, I had to trace through the score breakdown myself to confirm the logic was correct and the edge case was real. The tool surfaces the output but it does not tell you what the output means or whether you should trust it. Getting comfortable with that boundary — using AI to accelerate the work, using your own judgment to evaluate it — is probably the most transferable thing I practiced here.
-
+The project also made me think differently about where bias and unfairness hide in systems like this. The most obvious bias — genre weight dominating — is visible and easy to reason about. The subtler ones are harder to catch: the valence default silently rewarding mid-range songs, Overdrive Protocol acting as a free rider because its feature profile happens to align with the scoring machinery's blind spots, and the Knife Edge failure where the system essentially flipped a coin between the user's preferred genre and an unrelated track. In a production system these quiet failures would shape what millions of users hear without anyone noticing, which is why transparent scoring and adversarial testing matter even for simple models.
