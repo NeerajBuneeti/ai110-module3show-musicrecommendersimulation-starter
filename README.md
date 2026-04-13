@@ -169,6 +169,60 @@ You can add more tests in `tests/test_recommender.py`.
 
 ---
 
+## Sample Output
+
+Running `python -m src.main` with the **Gym Warrior** profile (genre: metal, mood: angry, energy: 0.95, likes_acoustic: False):
+
+```
+==================================================
+Profile: Gym Warrior
+==================================================
+
+Top recommendations:
+
+  #1  Iron Curtain - Razorback
+       Score: 96.2%  [###################-]
+       > genre match: metal -> metal (+3.00)
+       > mood match: angry -> angry (+2.50)
+       > energy proximity: |0.95 - 0.97| = 0.02 (+1.96)
+       > valence proximity: |0.5 - 0.31| = 0.19 (+1.22)
+       > acousticness: dislikes acoustic, song=0.06 (+0.94)
+
+  #2  Storm Runner - Voltline
+       Score: 73.4%  [###############-----]
+       > genre match: metal -> rock (+1.80)
+       > mood match: angry -> intense (+1.25)
+       > energy proximity: |0.95 - 0.91| = 0.04 (+1.92)
+       > valence proximity: |0.5 - 0.48| = 0.02 (+1.47)
+       > acousticness: dislikes acoustic, song=0.10 (+0.90)
+
+  #3  Overdrive Protocol - Flux State
+       Score: 54.7%  [###########---------]
+       > genre match: metal -> electronic (+0.00)
+       > mood match: angry -> energetic (+1.25)
+       > energy proximity: |0.95 - 0.95| = 0.00 (+2.00)
+       > valence proximity: |0.5 - 0.66| = 0.16 (+1.26)
+       > acousticness: dislikes acoustic, song=0.04 (+0.96)
+
+  #4  Gym Hero - Max Pulse
+       Score: 52.5%  [###########---------]
+       > genre match: metal -> pop (+0.00)
+       > mood match: angry -> intense (+1.25)
+       > energy proximity: |0.95 - 0.93| = 0.02 (+1.96)
+       > valence proximity: |0.5 - 0.77| = 0.27 (+1.09)
+       > acousticness: dislikes acoustic, song=0.05 (+0.95)
+
+  #5  Block Party Anthem - DJ Krave
+       Score: 39.5%  [########------------]
+       > genre match: metal -> hip-hop (+0.00)
+       > mood match: angry -> confident (+0.00)
+       > energy proximity: |0.95 - 0.88| = 0.07 (+1.86)
+       > valence proximity: |0.5 - 0.72| = 0.22 (+1.17)
+       > acousticness: dislikes acoustic, song=0.08 (+0.92)
+```
+
+---
+
 ## Experiments You Tried
 
 Use this section to document the experiments you ran. For example:
