@@ -136,15 +136,51 @@ class Recommender:
     Required by tests/test_recommender.py
     """
     def __init__(self, songs: List[Song]):
+        """Store the song catalog for repeated recommendation calls."""
         self.songs = songs
 
+    def _profile_to_prefs(self, user: UserProfile) -> Dict:
+        """Convert a UserProfile dataclass to the dict shape expected by score_song."""
+        return {
+            "genre": user.favorite_genre,
+            "mood": user.favorite_mood,
+            "energy": user.target_energy,
+            "likes_acoustic": user.likes_acoustic,
+        }
+
+    def _song_to_dict(self, song: Song) -> Dict:
+        """Convert a Song dataclass to the dict shape expected by score_song."""
+        return {
+            "genre": song.genre,
+            "mood": song.mood,
+            "energy": song.energy,
+            "valence": song.valence,
+            "acousticness": song.acousticness,
+        }
+
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        """Score every song against the user profile, return the top-k sorted highest score first."""
+        user_prefs = self._profile_to_prefs(user)
+        scored = [
+            (score_song(user_prefs, self._song_to_dict(s))[0], s)
+            for s in self.songs
+        ]
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [s for _, s in scored[:k]]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        """Return a human-readable explanation of why the song matches the user profile."""
+        user_prefs = self._profile_to_prefs(user)
+        score, reasons = score_song(user_prefs, self._song_to_dict(song))
+        genre_line = f"genre ({song.genre})"
+        mood_line = f"mood ({song.mood})"
+        energy_line = f"energy ({song.energy:.2f} vs your target {user.target_energy:.2f})"
+        summary = (
+            f"{song.title} by {song.artist} is a {score * 100:.1f}% match. "
+            f"Scored on {genre_line}, {mood_line}, {energy_line}. "
+            f"Details: {'; '.join(reasons)}"
+        )
+        return summary
 
 def load_songs(csv_path: str) -> List[Dict]:
     """
