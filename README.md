@@ -223,6 +223,168 @@ Top recommendations:
        > acousticness: dislikes acoustic, song=0.08 (+0.92)
 ```
 
+### Late-Night Study Session
+
+Running `python -m src.main` with the **Late-Night Study Session** profile (genre: lofi, mood: chill, energy: 0.38, likes_acoustic: True):
+
+![Late-Night Study Session](assets/late_night_study_session.png)
+
+```
+==================================================
+Profile: Late-Night Study Session
+==================================================
+
+Top recommendations:
+
+  #1  Library Rain - Paper Lanterns
+       Score: 96.5%  [###################-]
+       > genre match: lofi -> lofi (+3.00)
+       > mood match: chill -> chill (+2.50)
+       > energy proximity: |0.38 - 0.35| = 0.03 (+1.94)
+       > valence proximity: |0.5 - 0.6| = 0.10 (+1.35)
+       > acousticness: likes acoustic, song=0.86 (+0.86)
+
+  #2  Midnight Coding - LoRoom
+       Score: 95.4%  [###################-]
+       > genre match: lofi -> lofi (+3.00)
+       > mood match: chill -> chill (+2.50)
+       > energy proximity: |0.38 - 0.42| = 0.04 (+1.92)
+       > valence proximity: |0.5 - 0.56| = 0.06 (+1.41)
+       > acousticness: likes acoustic, song=0.71 (+0.71)
+
+  #3  Focus Flow - LoRoom
+       Score: 83.5%  [#################---]
+       > genre match: lofi -> lofi (+3.00)
+       > mood match: chill -> focused (+1.25)
+       > energy proximity: |0.38 - 0.4| = 0.02 (+1.96)
+       > valence proximity: |0.5 - 0.59| = 0.09 (+1.36)
+       > acousticness: likes acoustic, song=0.78 (+0.78)
+
+  #4  Spacewalk Thoughts - Orbit Bloom
+       Score: 73.9%  [###############-----]
+       > genre match: lofi -> ambient (+0.90)
+       > mood match: chill -> chill (+2.50)
+       > energy proximity: |0.38 - 0.28| = 0.10 (+1.80)
+       > valence proximity: |0.5 - 0.65| = 0.15 (+1.27)
+       > acousticness: likes acoustic, song=0.92 (+0.92)
+
+  #5  Coffee Shop Stories - Slow Stereo
+       Score: 62.0%  [############--------]
+       > genre match: lofi -> jazz (+0.90)
+       > mood match: chill -> relaxed (+1.25)
+       > energy proximity: |0.38 - 0.37| = 0.01 (+1.98)
+       > valence proximity: |0.5 - 0.71| = 0.21 (+1.19)
+       > acousticness: likes acoustic, song=0.89 (+0.89)
+```
+
+### Late-Night Driver
+
+Running `python -m src.main` with the **Late-Night Driver** profile (genre: synthwave, mood: moody, energy: 0.75, likes_acoustic: False):
+
+![Late-Night Driver](assets/late_night_Driver.png)
+
+```
+==================================================
+Profile: Late-Night Driver
+==================================================
+
+Top recommendations:
+
+  #1  Night Drive Loop - Neon Echo
+       Score: 97.6%  [####################]
+       > genre match: synthwave -> synthwave (+3.00)
+       > mood match: moody -> moody (+2.50)
+       > energy proximity: |0.75 - 0.75| = 0.00 (+2.00)
+       > valence proximity: |0.5 - 0.49| = 0.01 (+1.48)
+       > acousticness: dislikes acoustic, song=0.22 (+0.78)
+
+  #2  Overdrive Protocol - Flux State
+       Score: 56.2%  [###########---------]
+       > genre match: synthwave -> electronic (+1.80)
+       > mood match: moody -> energetic (+0.00)
+       > energy proximity: |0.75 - 0.95| = 0.20 (+1.60)
+       > valence proximity: |0.5 - 0.66| = 0.16 (+1.26)
+       > acousticness: dislikes acoustic, song=0.04 (+0.96)
+
+  #3  Storm Runner - Voltline
+       Score: 40.5%  [########------------]
+       > genre match: synthwave -> rock (+0.00)
+       > mood match: moody -> intense (+0.00)
+       > energy proximity: |0.75 - 0.91| = 0.16 (+1.68)
+       > valence proximity: |0.5 - 0.48| = 0.02 (+1.47)
+       > acousticness: dislikes acoustic, song=0.10 (+0.90)
+
+  #4  Empty Bottle Blues - T. Ray Jackson
+       Score: 40.4%  [########------------]
+       > genre match: synthwave -> blues (+0.00)
+       > mood match: moody -> sad (+1.25)
+       > energy proximity: |0.75 - 0.44| = 0.31 (+1.38)
+       > valence proximity: |0.5 - 0.29| = 0.21 (+1.19)
+       > acousticness: dislikes acoustic, song=0.78 (+0.22)
+
+  #5  Block Party Anthem - DJ Krave
+       Score: 38.3%  [########------------]
+       > genre match: synthwave -> hip-hop (+0.00)
+       > mood match: moody -> confident (+0.00)
+       > energy proximity: |0.75 - 0.88| = 0.13 (+1.74)
+       > valence proximity: |0.5 - 0.72| = 0.22 (+1.17)
+       > acousticness: dislikes acoustic, song=0.08 (+0.92)
+```
+
+### Soul & Warmth Seeker
+
+Running `python -m src.main` with the **Soul & Warmth Seeker** profile (genre: soul, mood: uplifting, energy: 0.62, likes_acoustic: True):
+
+![Soul & Warmth Seeker](assets/soul_warmth_seeker.png)
+
+```
+==================================================
+Profile: Soul & Warmth Seeker
+==================================================
+
+Top recommendations:
+
+  #1  Rise Together - Deja Gold
+       Score: 88.6%  [##################--]
+       > genre match: soul -> soul (+3.00)
+       > mood match: uplifting -> uplifting (+2.50)
+       > energy proximity: |0.62 - 0.67| = 0.05 (+1.90)
+       > valence proximity: |0.5 - 0.88| = 0.38 (+0.93)
+       > acousticness: likes acoustic, song=0.53 (+0.53)
+
+  #2  Velvet Nights - Sable Moore
+       Score: 50.4%  [##########----------]
+       > genre match: soul -> r&b (+1.80)
+       > mood match: uplifting -> romantic (+0.00)
+       > energy proximity: |0.62 - 0.55| = 0.07 (+1.86)
+       > valence proximity: |0.5 - 0.78| = 0.28 (+1.08)
+       > acousticness: likes acoustic, song=0.30 (+0.30)
+
+  #3  Empty Bottle Blues - T. Ray Jackson
+       Score: 45.1%  [#########-----------]
+       > genre match: soul -> blues (+0.90)
+       > mood match: uplifting -> sad (+0.00)
+       > energy proximity: |0.62 - 0.44| = 0.18 (+1.64)
+       > valence proximity: |0.5 - 0.29| = 0.21 (+1.19)
+       > acousticness: likes acoustic, song=0.78 (+0.78)
+
+  #4  Coffee Shop Stories - Slow Stereo
+       Score: 44.7%  [#########-----------]
+       > genre match: soul -> jazz (+0.90)
+       > mood match: uplifting -> relaxed (+0.00)
+       > energy proximity: |0.62 - 0.37| = 0.25 (+1.50)
+       > valence proximity: |0.5 - 0.71| = 0.21 (+1.19)
+       > acousticness: likes acoustic, song=0.89 (+0.89)
+
+  #5  Rooftop Lights - Indigo Parade
+       Score: 43.5%  [#########-----------]
+       > genre match: soul -> indie pop (+0.00)
+       > mood match: uplifting -> happy (+1.25)
+       > energy proximity: |0.62 - 0.76| = 0.14 (+1.72)
+       > valence proximity: |0.5 - 0.81| = 0.31 (+1.03)
+       > acousticness: likes acoustic, song=0.35 (+0.35)
+```
+
 ### Adversarial Profiles
 
 Three profiles designed to expose weaknesses in the scoring algorithm: a double-isolated genre/mood node, a mood-overrides-genre inversion, and a knife-edge contradiction where opposing features cancel out.
