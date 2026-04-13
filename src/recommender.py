@@ -299,6 +299,24 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     return (score, reasons)
 
+def apply_diversity_penalty(scored_songs: List[Tuple[Dict, float, str]], k: int = 5, max_per_genre: int = 2) -> List[Tuple[Dict, float, str]]:
+    """
+    Filters a pre-sorted list of scored songs so that no single genre
+    occupies more than max_per_genre slots in the top-k results.
+    """
+    result = []
+    genre_count: Dict[str, int] = {}
+    for song, score, explanation in scored_songs:
+        genre = song.get("genre", "").lower()
+        count = genre_count.get(genre, 0)
+        if count < max_per_genre:
+            result.append((song, score, explanation))
+            genre_count[genre] = count + 1
+            if len(result) == k:
+                break
+    return result
+
+
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
     """
     Functional implementation of the recommendation logic.
@@ -310,4 +328,5 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tup
         explanation = "; ".join(reasons)
         scored.append((song, score, explanation))
 
-    return sorted(scored, key=lambda x: x[1], reverse=True)[:k]
+    ranked = sorted(scored, key=lambda x: x[1], reverse=True)
+    return apply_diversity_penalty(ranked, k)
