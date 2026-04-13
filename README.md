@@ -36,11 +36,11 @@ A UserProfile stores four preference inputs: a favorite_genre, a favorite_mood, 
 The Recommender scores each song by comparing those preferences against the song's attributes using a weighted formula. Genre and mood are categorical matches — exact matches score highest, but neighboring genres and moods get partial credit so the system doesn't completely reject a song just because the label differs. Energy and valence use a proximity formula: 1.0 - |user_preference - song_value|, which rewards songs that are close to what the user wants rather than just high or low. Acousticness is handled as a directional preference — if the user likes acoustic sounds, higher acousticness scores better, and vice versa.
 The weights reflect a deliberate hierarchy:
 
-Genre: 3.0 — defines the entire sonic world
-Mood: 2.5 — sets the emotional intent
-Energy: 2.0 — captures the physical feel
-Valence: 1.5 — fine-tunes emotional tone
-Acousticness: 1.0 — texture preference
+- Genre: 3.0 — defines the entire sonic world
+- Mood: 2.5 — sets the emotional intent
+- Energy: 2.0 — captures the physical feel
+- Valence: 1.5 — fine-tunes emotional tone
+- Acousticness: 1.0 — texture preference
 
 Every song's weighted component scores are summed and divided by the total possible weight (10.0) to produce a final score between 0 and 1. Songs are then ranked by score and the top-k results are returned, each paired with a plain-language explanation of what made it a good match.
 
