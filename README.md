@@ -539,11 +539,25 @@ Top recommendations:
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+### Weight Shift: Genre 3.0 → 1.5, Energy 2.0 → 4.0, Normalizer 10.0 → 11.0
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+The genre weight was halved, the energy weight was doubled, and the normalizer was updated to reflect the new total (11.0). All seven profiles were re-run and the rank-1 result was compared against the original weights.
+
+**Result: no rank-1 winner changed for any profile.**
+
+| Profile | Original #1 | Experiment #1 | Rank changed? |
+|---|---|---|---|
+| Gym Warrior | Iron Curtain (96.2%) | Iron Curtain (91.6%) | No |
+| Late-Night Study Session | Library Rain (96.5%) | Library Rain (91.7%) | No |
+| Late-Night Driver | Night Drive Loop (97.6%) | Night Drive Loop (93.3%) | No |
+| Soul & Warmth Seeker | Rise Together (88.6%) | Rise Together (84.2%) | No |
+| Adversarial 1 - Catalog Cliff | Block Party Anthem (95.3%) | Block Party Anthem (90.6%) | No |
+| Adversarial 2 - Mood Override | Overdrive Protocol (66.6%) | Overdrive Protocol (78.2%) | No — and worse |
+| Adversarial 3 - Knife Edge | Overdrive Protocol (57.0%) | Overdrive Protocol (69.1%) | No — and worse |
+
+**What it revealed:**
+
+The standard profiles are stable under weight perturbation because their genre and mood signals are strong enough that almost any reasonable configuration produces the same top result. The experiment did not fix the adversarial failures — it made them worse. Doubling the energy weight gave Overdrive Protocol even more scoring authority, pushing the Mood Override winner from 66.6% to 78.2% and widening the Knife Edge margin from 0.3 points to roughly 12 points. The failures in those two profiles are not caused by bad weight calibration. They stem from catalog sparsity (one reggae song, one classical song) and isolated mood nodes (no adjacency for `confident`, `nostalgic`, `romantic`). No weight adjustment fixes a structural gap in the catalog.
 
 ---
 
