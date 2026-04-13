@@ -171,9 +171,97 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     Scores a single song against user preferences.
     Required by recommend_songs() and src/main.py
     """
-    # TODO: Implement scoring logic using your Algorithm Recipe from Phase 2.
-    # Expected return format: (score, reasons)
-    return []
+    reasons = []
+
+    # --- Genre (weight 3.0) ---
+    GENRE_CLOSE_COUSINS = [
+        {"rock", "metal"},
+        {"pop", "indie pop"},
+        {"synthwave", "electronic"},
+        {"r&b", "soul"},
+        {"folk", "country"},
+        {"jazz", "blues"},
+    ]
+    GENRE_EXTENDED_FAMILIES = [
+        {"soul", "jazz", "blues", "r&b"},
+        {"lofi", "ambient", "jazz"},
+    ]
+
+    user_genre = user_prefs.get("genre", "").lower()
+    song_genre = song.get("genre", "").lower()
+
+    if user_genre == song_genre:
+        genre_score = 1.0
+    elif any(user_genre in pair and song_genre in pair for pair in GENRE_CLOSE_COUSINS):
+        genre_score = 0.6
+    elif any(user_genre in group and song_genre in group for group in GENRE_EXTENDED_FAMILIES):
+        genre_score = 0.3
+    else:
+        genre_score = 0.0
+
+    genre_weighted = genre_score * 3.0
+    reasons.append(f"genre match: {user_genre} → {song_genre} (+{genre_weighted:.2f})")
+
+    # --- Mood (weight 2.5) ---
+    MOOD_ADJACENT = [
+        {"happy", "uplifting"},
+        {"chill", "relaxed", "peaceful"},
+        {"intense", "angry", "energetic"},
+        {"focused", "chill"},
+        {"moody", "melancholic", "sad"},
+    ]
+    MOOD_DISTANT = [
+        {"happy", "focused"},
+        {"chill", "moody"},
+    ]
+
+    user_mood = user_prefs.get("mood", "").lower()
+    song_mood = song.get("mood", "").lower()
+
+    if user_mood == song_mood:
+        mood_score = 1.0
+    elif any(user_mood in group and song_mood in group for group in MOOD_ADJACENT):
+        mood_score = 0.5
+    elif any(user_mood in pair and song_mood in pair for pair in MOOD_DISTANT):
+        mood_score = 0.2
+    else:
+        mood_score = 0.0
+
+    mood_weighted = mood_score * 2.5
+    reasons.append(f"mood match: {user_mood} → {song_mood} (+{mood_weighted:.2f})")
+
+    # --- Energy (weight 2.0) ---
+    user_energy = user_prefs["energy"]
+    song_energy = song["energy"]
+    energy_diff = abs(user_energy - song_energy)
+    energy_score = 1.0 - energy_diff
+    energy_weighted = energy_score * 2.0
+    reasons.append(f"energy proximity: |{user_energy} - {song_energy}| = {energy_diff:.2f} (+{energy_weighted:.2f})")
+
+    # --- Valence (weight 1.5) ---
+    user_valence = user_prefs.get("target_valence", 0.5)
+    song_valence = song["valence"]
+    valence_diff = abs(user_valence - song_valence)
+    valence_score = 1.0 - valence_diff
+    valence_weighted = valence_score * 1.5
+    reasons.append(f"valence proximity: |{user_valence} - {song_valence}| = {valence_diff:.2f} (+{valence_weighted:.2f})")
+
+    # --- Acousticness (weight 1.0) ---
+    song_acousticness = song["acousticness"]
+    if user_prefs["likes_acoustic"]:
+        acousticness_score = song_acousticness
+        acoustic_label = "likes acoustic"
+    else:
+        acousticness_score = 1.0 - song_acousticness
+        acoustic_label = "dislikes acoustic"
+    acousticness_weighted = acousticness_score * 1.0
+    reasons.append(f"acousticness: {acoustic_label}, song={song_acousticness:.2f} (+{acousticness_weighted:.2f})")
+
+    # --- Final score (normalize by total weight 10.0) ---
+    raw = genre_weighted + mood_weighted + energy_weighted + valence_weighted + acousticness_weighted
+    score = raw / 10.0
+
+    return (score, reasons)
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
     """
