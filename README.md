@@ -64,6 +64,30 @@ Every song's weighted component scores are summed and divided by the total possi
 | `target_energy` | float 0–1 | Ideal energy level — proximity scored |
 | `likes_acoustic` | boolean | True = prefers acoustic, False = prefers produced |
 
+### Algorithm Recipe
+
+The recommender scores each song by running it through five feature checks and adding up the weighted results.
+
+**Genre (weight 3.0):** An exact match scores 1.0. If the song's genre is in the same broader family — say, hip-hop when the user asked for rap — it scores 0.6. A more distant but still related genre scores 0.3. No connection at all scores 0.0.
+
+**Mood (weight 2.5):** Exact match scores 1.0. An adjacent mood — something like "melancholy" when the user said "sad" — scores 0.5. A loosely related mood scores 0.2. Unrelated moods score 0.0.
+
+**Energy (weight 2.0):** Scored by proximity: `1.0 - |user.target_energy - song.energy|`. A song that perfectly matches the user's energy level scores 1.0; the further away it lands, the lower the score.
+
+**Valence (weight 1.5):** Same proximity formula as energy: `1.0 - |user.valence - song.valence|`. If the user hasn't specified a valence preference, the song's value is compared against a neutral default of 0.5.
+
+**Acousticness (weight 1.0):** Directional rather than proximity-based. If the user likes acoustic sounds, the song's raw acousticness value is used as-is. If they prefer produced sounds, the score is flipped: `1.0 - song.acousticness`.
+
+The five weighted scores are summed and divided by 10.0 — the total possible weight — producing a final score between 0 and 1. Songs are ranked by this score, and the top-k are returned with a plain-language explanation of what made each one a good match.
+
+### Known Biases and Limitations
+
+- **Genre dominates everything.** With a weight of 3.0 — triple that of acousticness — a song in the wrong genre can barely compete no matter how well it matches on energy, mood, or texture. A jazz fan will almost never see a soul track in their recommendations even if the two share identical character.
+- **Most genres have thin catalog coverage.** The 20-song catalog concentrates in a handful of genres, so users who prefer less-represented styles like classical or reggae will hit a ceiling of good matches quickly and may receive off-genre recommendations simply because there's nothing closer in stock.
+- **No behavioral learning.** The system only knows what users say they want, not what they actually listen to. It can't correct itself when stated preference and real preference diverge, and it won't pick up on shifts in taste over time the way a streaming platform would.
+- **Filter bubble risk.** Heavy weighting toward exact or near matches means the same cluster of songs tends to surface for similar user profiles. Users are never nudged toward music outside their stated preferences, which can reinforce existing taste rather than broaden it.
+- **Valence is often a guess.** If the user doesn't provide a valence preference, the system quietly defaults to 0.5 — neutral — which disadvantages both very uplifting and very somber tracks even when the user might have loved them.
+
 ---
 
 ## Data Flow
