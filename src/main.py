@@ -14,6 +14,7 @@ from src.recommender import load_songs, recommend_songs
 
 def main() -> None:
     songs = load_songs("data/songs.csv")
+    print(f"Loaded {len(songs)} songs.")
 
     # ── User Profiles ──────────────────────────────────────────────────────────
     #
