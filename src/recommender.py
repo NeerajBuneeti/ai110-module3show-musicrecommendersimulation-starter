@@ -200,7 +200,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         genre_score = 0.0
 
     genre_weighted = genre_score * 3.0
-    reasons.append(f"genre match: {user_genre} → {song_genre} (+{genre_weighted:.2f})")
+    reasons.append(f"genre match: {user_genre} -> {song_genre} (+{genre_weighted:.2f})")
 
     # --- Mood (weight 2.5) ---
     MOOD_ADJACENT = [
@@ -228,7 +228,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         mood_score = 0.0
 
     mood_weighted = mood_score * 2.5
-    reasons.append(f"mood match: {user_mood} → {song_mood} (+{mood_weighted:.2f})")
+    reasons.append(f"mood match: {user_mood} -> {song_mood} (+{mood_weighted:.2f})")
 
     # --- Energy (weight 2.0) ---
     user_energy = user_prefs["energy"]
@@ -268,6 +268,10 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tup
     Functional implementation of the recommendation logic.
     Required by src/main.py
     """
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
-    return []
+    scored = []
+    for song in songs:
+        score, reasons = score_song(user_prefs, song)
+        explanation = "; ".join(reasons)
+        scored.append((song, score, explanation))
+
+    return sorted(scored, key=lambda x: x[1], reverse=True)[:k]
